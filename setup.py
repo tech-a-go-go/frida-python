@@ -11,23 +11,23 @@ from setuptools.command.build_ext import build_ext
 from setuptools.extension import Extension
 
 SOURCE_ROOT = Path(__file__).resolve().parent
-FRIDA_EXTENSION = os.environ.get("FRIDA_EXTENSION", None)
+FRIDA_EXTENSION = os.environ.get("FRIDA_EXTENSION", os.environ.get("SUNDAY_EXTENSION", None))
 
 
 def main():
     setup(
-        name="frida",
+        name="sunday",
         version=detect_version(),
-        description="Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers",
+        description="Dynamic instrumentation toolkit (sunday-rebrand local research build)",
         long_description=compute_long_description(),
         long_description_content_type="text/markdown",
-        author="Frida Developers",
-        author_email="oleavr@frida.re",
-        url="https://frida.re",
+        author="Sunday (rebrand)",
+        author_email="local@research",
+        url="https://example.invalid/sunday",
         install_requires=["typing_extensions; python_version<'3.11'"],
         python_requires=">=3.7",
         license="wxWindows Library Licence, Version 3.1",
-        keywords="frida debugger dynamic instrumentation inject javascript windows macos linux ios iphone ipad android qnx",
+        keywords="instrumentation inject javascript windows macos linux",
         classifiers=[
             "Development Status :: 5 - Production/Stable",
             "Environment :: Console",
@@ -50,12 +50,12 @@ def main():
             "Topic :: Software Development :: Debuggers",
             "Topic :: Software Development :: Libraries :: Python Modules",
         ],
-        packages=["frida", "frida._frida"],
-        package_data={"frida": ["py.typed"], "frida._frida": ["py.typed", "__init__.pyi"]},
+        packages=["sunday", "sunday._sunday"],
+        package_data={"sunday": ["py.typed"], "sunday._sunday": ["py.typed", "__init__.pyi"]},
         ext_modules=[
             Extension(
-                name="frida._frida",
-                sources=["frida/_frida/extension.c"],
+                name="sunday._sunday",
+                sources=["sunday/_sunday/extension.c"],
                 py_limited_api=True,
             )
         ],
@@ -119,7 +119,7 @@ class FridaDemandBuiltExt(build_ext):
         make = SOURCE_ROOT / "make.bat" if platform.system() == "Windows" else "make"
         subprocess.run([make], check=True)
 
-        outputs = [entry for entry in (SOURCE_ROOT / "build" / "frida" / "_frida").glob("_frida.*") if entry.is_file()]
+        outputs = [entry for entry in (SOURCE_ROOT / "build" / "sunday" / "_sunday").glob("_sunday.*") if entry.is_file()]
         assert len(outputs) == 1
         target = self.get_ext_fullpath(ext.name)
         Path(target).parent.mkdir(parents=True, exist_ok=True)
